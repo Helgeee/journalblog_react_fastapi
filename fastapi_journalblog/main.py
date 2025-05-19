@@ -4,9 +4,10 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api_v1.crud.demo_auto_crud import demo_m2m
+# from src.api_v1.crud.demo_auto_crud import demo_m2m
 from src.api_v1.routers import router as main_router
-from src.db.database import drop_tables, create_tables, async_session_factory
+
+# from src.db.database import drop_tables, create_tables, async_session_factory
 
 # from src.api_v1.crud.demo_auto_crud import demo_m2m
 # from src.core.config import static_files, templates
@@ -52,4 +53,4 @@ async def db_moves():
 
 if __name__ == "__main__":
     # asyncio.run(db_moves())
-    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=4000, reload=True)

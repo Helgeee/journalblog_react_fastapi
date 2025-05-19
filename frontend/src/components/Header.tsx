@@ -6,6 +6,7 @@ import { useAppDispatch } from '../store/hooks'
 import { removeTokenFromLocalStorage } from '../helpers/localstorage.helper'
 import { toast } from 'react-toastify'
 import { logout } from '../store/user/userSlice'
+import { openAuthModal } from '../store/modal/modalSlice'
 
 const Header: FC = () => {
 	// const isAuth = useAuth()
@@ -22,7 +23,7 @@ const Header: FC = () => {
 	}
 
 	return (
-		<header className="relative flex items-center justify-center text-lg px-5 py-3 shadow-sm backdrop-blur-sm bg-component">
+		<header className="relative flex items-center justify-center space-between text-lg px-5 py-3 shadow-sm backdrop-blur-sm bg-component">
 			{/* Menu */}
 			{isAuth && (
 				<nav className=" mr-10 ">
@@ -87,11 +88,18 @@ const Header: FC = () => {
 				<Link
 					className="py-2 text-white/50 hover:text-white ml-auto mr-10"
 					to="/auth"
-					aria-label="Log In / Sign In"
+					aria-label="Вход / Регистрация"
+					onClick={() => dispatch(openAuthModal())}
 				>
-					Log In / Sign In
+					Вход / Регистрация
 				</Link>
 			)}
+			<button
+				onClick={() => dispatch(openAuthModal())}
+				className="py-2 text-white/50 hover:text-white ml-auto mr-10"
+			>
+				Вход / Регистрация
+			</button>
 		</header>
 	)
 }

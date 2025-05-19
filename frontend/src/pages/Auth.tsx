@@ -54,14 +54,14 @@ const Auth: FC = () => {
 	}
 
 	return (
-		<div className="mt-40 flex  flex-col justify-center items-center rounded-lg  text-white p-10 bg-gray-800/10 backdrop-blur-lg">
+		<div className="flex  flex-col justify-center items-center rounded-lg  p-10  p-6 text-white  ">
 			<h1 className="text-center text-xl mb-10">
 				{isLogin ? 'Вход' : 'Регистрация'}
 			</h1>
 
 			<form
 				onSubmit={isLogin ? loginHandler : registrationHandler}
-				className="mx-auto flex w-1/3 flex-col  gap-5"
+				className="mx-auto flex w-2/3 flex-col  gap-5"
 			>
 				<input
 					type="text"
