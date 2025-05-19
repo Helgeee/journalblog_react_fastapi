@@ -4,7 +4,6 @@ import ErrorPage from '../pages/ErrorPage'
 import Home from '../pages/Home'
 import Transactions from '../pages/Transactions'
 
-import Auth from '../pages/Auth'
 
 export const router = createBrowserRouter([
 	{
@@ -21,10 +20,10 @@ export const router = createBrowserRouter([
 				element: <Transactions />,
 			},
 
-			{
-				path: 'auth',
-				element: <Auth />,
-			},
+			// {
+			// 	path: 'auth',
+			// 	element: <Auth />,
+			// },
 		],
 	},
 ])

@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { closeAuthModal } from '../store/modal/modalSlice'
-import Auth from '../pages/Auth'
+import Auth from './Auth'
 
 const AuthModal: FC = () => {
 	const dispatch = useAppDispatch()

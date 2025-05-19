@@ -1,5 +1,6 @@
 export interface IUser {
 	id: number
+	username: string
 	email: string
 	token: string
 }
@@ -22,10 +23,18 @@ export interface IResponseUserData {
 	user: IResponseUser
 }
 
-export type ICategory = {
+export type IPost = {
 	title: string
-	id: number
-	createdAt: string
-	updatedAt: string
-	transactions: []
+	content : string
+}
+
+export type ICategory = {
+	name: string
+	
+}
+
+
+export type ITags = {
+
+	name: string
 }
