@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 import PostCard from '../components/PostCard'
 
@@ -11,14 +12,16 @@ type Post = {
 const Home: FC = () => {
 	const [posts, setPosts] = useState<Post[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
+	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				const response = await axios.get<Post[]>('http://localhost:8000/posts')
+				const response = await axios.get<Post[]>('http://localhost:4000/posts')
 				setPosts(response.data)
 			} catch (error) {
 				console.error('Ошибка при получении постов:', error)
+				setError('Не удалось загрузить посты')
 			} finally {
 				setLoading(false)
 			}
@@ -30,13 +33,26 @@ const Home: FC = () => {
 	if (loading)
 		return <p className="text-center text-white">Загрузка постов...</p>
 
-	return (
-		<div className="p-4">
-			<PostCard />
+	if (error) return <p className="text-center text-red-500">{error}</p>
 
-			{/* {posts.map((post) => (
-				<PostCard key={post.id} post={post} />
-			))} */}
+	return (
+		<div>
+			{posts.map((post) => (
+				<PostCard
+					key={post.id}
+					post={{
+						title: post.title,
+						category: 'Категория не указана', // если у тебя есть категория - подставь
+						items: [],
+						stats: { views: 0, likes: 0, comments: 0 }, // или возьми из поста
+						imageUrl: '', // если есть картинка - подставь
+						imageAlt: '',
+						showMoreText: 'Читать дальше',
+					}}
+					onShowMore={() => console.log('Показать больше', post.id)}
+					className="mb-4 mt-4"
+				/>
+			))}
 		</div>
 	)
 }

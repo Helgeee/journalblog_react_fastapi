@@ -8,6 +8,7 @@ import { login } from '../store/user/userSlice'
 
 const Auth: FC = () => {
 	const [email, setEmail] = useState<string>('')
+	const [username, setUsername] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [isLogin, setIsLogin] = useState<boolean>(false)
 	const dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ const Auth: FC = () => {
 	const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault()
-			const data = await AuthService.login({ email, password })
+			const data = await AuthService.login({ email , username, password })
 			if (data) {
 				setTokenToLocalStorage('token', data.token)
 				dispatch(login(data))
@@ -41,7 +42,7 @@ const Auth: FC = () => {
 	const registrationHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault()
-			const data = await AuthService.registration({ email, password })
+			const data = await AuthService.registration({ email , username, password })
 			if (data) {
 				toast.success('Аккаунт создан.')
 				setIsLogin(!isLogin)
@@ -54,7 +55,7 @@ const Auth: FC = () => {
 	}
 
 	return (
-		<div className="flex  flex-col justify-center items-center rounded-lg  p-10  p-6 text-white  ">
+		<div className="flex  flex-col justify-center items-center rounded-lg  p-10   text-white  ">
 			<h1 className="text-center text-xl mb-10">
 				{isLogin ? 'Вход' : 'Регистрация'}
 			</h1>
@@ -64,10 +65,17 @@ const Auth: FC = () => {
 				className="mx-auto flex w-2/3 flex-col  gap-5"
 			>
 				<input
-					type="text"
+					type="email"
 					className="input"
 					placeholder="email"
 					onChange={(e) => setEmail(e.target.value)}
+				/>
+
+				<input
+					type="text"
+					className="input"
+					placeholder="username"
+					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<input
 					type="password"
@@ -76,7 +84,7 @@ const Auth: FC = () => {
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 
-				<button className=" btn btn-green mx-auto">Вход</button>
+				<button className=" btn btn-green mx-auto"> {isLogin ? 'Вход' : 'Регистрация'} </button>
 			</form>
 
 			<div className=" flex justify-center mt-5">

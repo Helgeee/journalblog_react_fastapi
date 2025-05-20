@@ -1,13 +1,13 @@
 import { FC } from 'react'
-import { useAuth } from '../hooks/useAuth'
+
 import { FaMedal } from 'react-icons/fa'
 
 const UserCard: FC = () => {
 	// const user = useAppSelector((state) => state.user)
 
-	const isAuth = useAuth()
+	// const isAuth = useAuth()
 
-
+	const isAuth = true
 
 	return (
 		<div>

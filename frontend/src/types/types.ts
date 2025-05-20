@@ -6,8 +6,9 @@ export interface IUser {
 }
 
 export interface IUserData {
-	email: string
+	username: string
 	password: string
+	email: string
 }
 
 export interface IResponseUser {
@@ -25,16 +26,13 @@ export interface IResponseUserData {
 
 export type IPost = {
 	title: string
-	content : string
+	content: string
 }
 
 export type ICategory = {
 	name: string
-	
 }
 
-
 export type ITags = {
-
 	name: string
 }

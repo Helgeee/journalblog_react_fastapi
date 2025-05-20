@@ -23,54 +23,54 @@ const Header: FC = () => {
 	}
 
 	return (
-		<header className="relative flex items-center justify-center space-between text-lg px-5 py-3 shadow-sm backdrop-blur-sm bg-component">
+		<header className=" flex items-center text-lg px-5 py-3 shadow-sm backdrop-blur-sm bg-component">
 			{/* Menu */}
 			{/* {isAuth && ( */}
-				<nav className=" mr-10 ">
-					<ul className="flex items-center gap-20 ">
-						<li>
-							<NavLink
-								to="/"
-								className={({ isActive }) =>
-									isActive ? 'text-white' : 'text-white/50'
-								}
-							>
-								Дороги
-							</NavLink>
-						</li>
-						<li>
-							<NavLink
-								to="/"
-								className={({ isActive }) =>
-									isActive ? 'text-white' : 'text-white/50'
-								}
-							>
-								Промышленное строительство
-							</NavLink>
-						</li>
+			<nav className=" flex-1 flex justify-center ">
+				<ul className="flex  gap-20  ">
+					<li>
+						<NavLink
+							to="/"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							Дороги
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							to="/"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							Промышленное строительство
+						</NavLink>
+					</li>
 
-						<li>
-							<NavLink
-								to="/"
-								className={({ isActive }) =>
-									isActive ? 'text-white' : 'text-white/50'
-								}
-							>
-								Гражданское строительство
-							</NavLink>
-						</li>
-						<li>
-							<NavLink
-								to="/"
-								className={({ isActive }) =>
-									isActive ? 'text-white' : 'text-white/50'
-								}
-							>
-								Мосты
-							</NavLink>
-						</li>
-					</ul>
-				</nav>
+					<li>
+						<NavLink
+							to="/"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							Гражданское строительство
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							to="/"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							Мосты
+						</NavLink>
+					</li>
+				</ul>
+			</nav>
 			{/* )} */}
 
 			{/* Actions */}

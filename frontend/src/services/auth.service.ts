@@ -5,15 +5,18 @@ export const AuthService = {
 	async registration(
 		userData: IUserData,
 	): Promise<IResponseUserData | undefined> {
-		const { data } = await instance.post<IResponseUserData>('user', userData)
+		const { data } = await instance.post<IResponseUserData>(
+			'/users',
+			userData,
+		)
 		return data
 	},
 	async login(userData: IUserData): Promise<IUser | undefined> {
-		const { data } = await instance.post<IUser>('auth/login', userData)
+		const { data } = await instance.post<IUser>('/jwt/login', userData)
 		return data
 	},
 	async getProfile(): Promise<IUser | undefined> {
-		const { data } = await instance.get<IUser>('auth/profile')
+		const { data } = await instance.get<IUser>('jwt/users/me')
 		if (data) return data
 	},
 }

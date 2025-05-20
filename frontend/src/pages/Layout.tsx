@@ -19,7 +19,7 @@ const Layout: FC = () => {
 					<Search />
 					<Outlet />
 				</div>
-				<aside className="w-80 shrink-0">
+				<aside className="sticky w-80 shrink-0 right-10">
 					<UserCard />
 				</aside>
 			</div>
