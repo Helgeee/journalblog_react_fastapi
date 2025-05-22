@@ -6,9 +6,9 @@ export interface IUser {
 }
 
 export interface IUserData {
+	email?: string
 	username: string
 	password: string
-	email: string
 }
 
 export interface IResponseUser {

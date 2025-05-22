@@ -1,6 +1,6 @@
 export function getTokenFromLocalStorage(): string {
-	const data = localStorage.getItem("tocen")
-	const token = data ? JSON.parse(data) : ""
+	const data = localStorage.getItem('tocen')
+	const token = data ? JSON.parse(data) : ''
 
 	return token
 }

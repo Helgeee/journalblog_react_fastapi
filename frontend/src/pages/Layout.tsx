@@ -15,7 +15,7 @@ const Layout: FC = () => {
 
 			<AuthModal />
 			<div className="flex container-xl mx-auto px-4 gap-6 mt-6">
-				<div className="container   ">
+				<div className="container">
 					<Search />
 					<Outlet />
 				</div>

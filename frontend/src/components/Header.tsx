@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 import { useAuth } from '../hooks/useAuth'
 import { useAppDispatch } from '../store/hooks'
-import { removeTokenFromLocalStorage } from '../helpers/localstorage.helper'
+
 import { toast } from 'react-toastify'
 import { logout } from '../store/user/userSlice'
 import { openAuthModal } from '../store/modal/modalSlice'
@@ -17,7 +17,7 @@ const Header: FC = () => {
 
 	const logoutHandler = async () => {
 		dispatch(logout())
-		removeTokenFromLocalStorage('token')
+		// removeTokenFromLocalStorage('token')
 		toast.success('Logged out successfully')
 		navigate('/')
 	}
@@ -35,12 +35,23 @@ const Header: FC = () => {
 								isActive ? 'text-white' : 'text-white/50'
 							}
 						>
-							Дороги
+							Все статьи
 						</NavLink>
 					</li>
 					<li>
 						<NavLink
-							to="/"
+							to="/roads"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							Дороги
+						</NavLink>
+					</li>
+
+					<li>
+						<NavLink
+							to="/roads"
 							className={({ isActive }) =>
 								isActive ? 'text-white' : 'text-white/50'
 							}
@@ -51,7 +62,7 @@ const Header: FC = () => {
 
 					<li>
 						<NavLink
-							to="/"
+							to="/roads"
 							className={({ isActive }) =>
 								isActive ? 'text-white' : 'text-white/50'
 							}
@@ -61,7 +72,7 @@ const Header: FC = () => {
 					</li>
 					<li>
 						<NavLink
-							to="/"
+							to="/roads"
 							className={({ isActive }) =>
 								isActive ? 'text-white' : 'text-white/50'
 							}

@@ -25,16 +25,17 @@ const Auth: FC = () => {
 	const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault()
-			const data = await AuthService.login({ email , username, password })
+			const data = await AuthService.login({ username, password })
 			if (data) {
 				setTokenToLocalStorage('token', data.token)
 				dispatch(login(data))
 				toast.success('Вы вошли в аккаунт')
 				navigate('/')
+				console.log(data)
+				dispatch(login({ username }))
 			}
 		} catch (err) {
-			const error =
-				(err as ApiError).response?.data.message || 'Ошибка регистрации'
+			const error = (err as ApiError).response?.data.message || 'Ошибка входа'
 			toast.error(error)
 		}
 	}
@@ -42,7 +43,8 @@ const Auth: FC = () => {
 	const registrationHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault()
-			const data = await AuthService.registration({ email , username, password })
+			const data = await AuthService.registration({ email, username, password })
+			console.log(data)
 			if (data) {
 				toast.success('Аккаунт создан.')
 				setIsLogin(!isLogin)
@@ -51,6 +53,7 @@ const Auth: FC = () => {
 			const error =
 				(err as ApiError).response?.data.message || 'Ошибка регистрации'
 			toast.error(error)
+			console.error('Registration error:')
 		}
 	}
 
@@ -64,27 +67,35 @@ const Auth: FC = () => {
 				onSubmit={isLogin ? loginHandler : registrationHandler}
 				className="mx-auto flex w-2/3 flex-col  gap-5"
 			>
-				<input
-					type="email"
-					className="input"
-					placeholder="email"
-					onChange={(e) => setEmail(e.target.value)}
-				/>
+				{!isLogin && (
+					<input
+						type="email"
+						className="input"
+						placeholder="email"
+						name="email"
+						onChange={(e) => setEmail(e.target.value)}
+					/>
+				)}
 
 				<input
 					type="text"
 					className="input"
 					placeholder="username"
+					name="username"
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<input
 					type="password"
 					className="input"
 					placeholder="password"
+					name="password"
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 
-				<button className=" btn btn-green mx-auto"> {isLogin ? 'Вход' : 'Регистрация'} </button>
+				<button className=" btn btn-green mx-auto">
+					{' '}
+					{isLogin ? 'Вход' : 'Регистрация'}{' '}
+				</button>
 			</form>
 
 			<div className=" flex justify-center mt-5">
@@ -93,14 +104,14 @@ const Auth: FC = () => {
 						onClick={() => setIsLogin(!isLogin)}
 						className="text-slate-300 hover:text-white"
 					>
-						You don't have an account
+						У вас нет учетной записи
 					</button>
 				) : (
 					<button
 						onClick={() => setIsLogin(!isLogin)}
 						className="text-slate-300 hover:text-white"
 					>
-						Already have an account
+						Уже есть аккаунт
 					</button>
 				)}
 			</div>
