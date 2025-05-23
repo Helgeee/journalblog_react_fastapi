@@ -6,6 +6,8 @@ import Search from '../components/Search'
 import UserCard from '../components/UserCard'
 import AuthModal from '../components/AuthModal'
 
+import CreatePostModalWrapper from '../components/CreatePostModal'
+
 const Layout: FC = () => {
 	return (
 		<div className="min-h-screen  pb-20 font-roboto text-white layout">
@@ -14,6 +16,7 @@ const Layout: FC = () => {
 			</div>
 
 			<AuthModal />
+			<CreatePostModalWrapper />
 			<div className="flex container-xl mx-auto px-4 gap-6 mt-6">
 				<div className="container">
 					<Search />

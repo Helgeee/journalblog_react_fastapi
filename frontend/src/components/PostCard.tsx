@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface Post {
+	id: number
 	title: string
 	category: string
 	items: string[]
@@ -21,12 +23,19 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, onShowMore, className }) => {
+	const navigate = useNavigate()
+
+	const handleShowMore = () => {
+		navigate(`/post/${post.id}`)
+	}
+
 	return (
-		<div className={`max-w-md mx-auto p-4 text-white rounded-lg shadow bg-component ${className}`}>
-			{/* Заголовок */}
+		<div
+			onClick={handleShowMore}
+			className={`max-w-md mx-auto p-4 text-white rounded-lg shadow bg-component cursor-pointer ${className}`}
+		>
 			<h1 className="text-2xl font-bold mb-4">{post.title}</h1>
 
-			{/* Категории */}
 			<div className="mb-6">
 				<ul className="pl-5 flex gap-2 flex-wrap">
 					{post.items.map((item, idx) => (
@@ -40,7 +49,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, onShowMore, className }) => {
 				</ul>
 			</div>
 
-			{/* Изображение */}
 			{post.imageUrl && (
 				<div className="h-48 overflow-hidden rounded mb-4">
 					<img
@@ -53,17 +61,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, onShowMore, className }) => {
 
 			<hr className="my-4 border-gray-200/30" />
 
-			{/* Кнопка "Показать больше" */}
 			{onShowMore && (
 				<button
-					onClick={onShowMore}
+					onClick={(e) => {
+						e.stopPropagation()
+						handleShowMore()
+					}}
 					className="text-blue-400 hover:text-blue-600 font-medium mb-6 transition-colors"
 				>
 					{post.showMoreText || 'Показать больше'}
 				</button>
 			)}
 
-			{/* Статистика */}
 			<div className="grid grid-cols-3 gap-4 text-center text-sm">
 				<div>
 					<p className="font-medium">{post.stats.views}</p>

@@ -1,49 +1,49 @@
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { PostService } from '../services/post.service'
+import { IPost } from '../types/types'
+
 const PostPage = () => {
+	const { id } = useParams()
+	const [post, setPost] = useState<IPost | null>(null)
+
+	useEffect(() => {
+		const fetchPost = async () => {
+			try {
+				const data = await PostService.getPostById(id!)
+				setPost(data)
+			} catch (error) {
+				console.error('Ошибка при загрузке поста', error)
+			}
+		}
+		fetchPost()
+	}, [id])
+
+	if (!post) return <div className="text-white">Загрузка...</div>
+
 	return (
-		<div className="max-w-md mx-auto p-4 text-white  rounded-lg shadow bg-component">
-			{/* Заголовок */}
-			<h1 className="text-2xl font-bold  mb-4">post</h1>
-
-			<div className="mb-6">
-				<ul className=" pl-5 flex gap-1">
-					<li className="bg-component-imput  rounded-lg px-2 text-center">
-						Дороги
-					</li>
-					<li className="bg-component-imput  rounded-lg px-2 ">
-						Гражданские строительство
-					</li>
-					<li className="bg-component-imput  rounded-lg px-2 ">Мосты</li>
-				</ul>
+		<div className="max-w-2xl mx-auto p-6 text-white rounded-lg shadow bg-component">
+			<h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+			<p className="mb-4 text-white/70">{post.content}</p>
+			<div className="flex gap-2 flex-wrap mb-6">
+				{post.category?.name && (
+					<span className="bg-component-input rounded px-2 py-1 text-sm">
+						{post.category.name}
+					</span>
+				)}
 			</div>
-
-			{/* {post.imageUrl && (
-				<div className="h-48 overflow-hidden">
-					<img
-						src={post.imageUrl}
-						alt={post.imageAlt || post.title}
-						className="w-full h-full object-cover"
-					/>
-				</div>
-			)} */}
-
-			<hr className="my-4 border-gray-200" />
-
-			{/* Кнопка "Показать больше" */}
-			<button className="text-blue-600 hover:text-blue-800 font-medium mb-6 transition-colors">
-				{/* {post.showMoreText || 'Показать больше'} */}
-				'Показать больше'
-			</button>
-
-			{/* Статистика */}
-			<div className="grid grid-cols-3 gap-4 text-center  text-sm">
+			<div className="grid grid-cols-3 gap-4 text-center text-sm">
 				<div>
-					<p className="font-medium"> Views</p>
+					{/* <p className="font-medium">{post.views}</p> */}
+					<p className="text-white/60">Просмотры</p>
 				</div>
 				<div>
-					<p className="font-medium"> Likes</p>
+					{/* <p className="font-medium">{post.likes}</p> */}
+					<p className="text-white/60">Лайки</p>
 				</div>
 				<div>
-					<p className="font-medium"> Comments</p>
+					{/* <p className="font-medium">{post.comments?.length || 0}</p> */}
+					<p className="text-white/60">Комментарии</p>
 				</div>
 			</div>
 		</div>

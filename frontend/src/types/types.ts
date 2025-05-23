@@ -24,9 +24,20 @@ export interface IResponseUserData {
 	user: IResponseUser
 }
 
-export type IPost = {
+export type ICreatePostPayload = {
 	title: string
 	content: string
+	categoryName: string
+}
+
+export type IPost = {
+	id: number
+	title: string
+	content: string
+	category: {
+		id: number
+		name: string
+	}
 }
 
 export type ICategory = {

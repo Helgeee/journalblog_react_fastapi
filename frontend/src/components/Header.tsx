@@ -72,7 +72,7 @@ const Header: FC = () => {
 					</li>
 					<li>
 						<NavLink
-							to="/roads"
+							to="/bridges"
 							className={({ isActive }) =>
 								isActive ? 'text-white' : 'text-white/50'
 							}
