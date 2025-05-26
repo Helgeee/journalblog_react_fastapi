@@ -49,17 +49,6 @@ async def get_category(
     return category
 
 
-# @router.patch("/{category_id}", summary="Изменить имя категории")
-# async def update_category_name(
-#     category_id: int, new_name: str, session: AsyncSession = Depends(get_async_session)
-# ):
-#     category = await session.get(Category, category_id)
-#
-#     if category == None:
-#         raise HTTPException(status_code=404, detail="Категория не найден")
-#     category.name = new_name
-#     await session.commit()
-#     return {"new_category_set": True, "category": category}
 
 
 @router.delete("/{category_id}", summary="Удалить категории")
@@ -73,3 +62,15 @@ async def delete_category(
     await session.delete(category)
     await session.commit()
     return {"success_delete": True}
+
+# @router.patch("/{category_id}", summary="Изменить имя категории")
+# async def update_category_name(
+#     category_id: int, new_name: str, session: AsyncSession = Depends(get_async_session)
+# ):
+#     category = await session.get(Category, category_id)
+#
+#     if category == None:
+#         raise HTTPException(status_code=404, detail="Категория не найден")
+#     category.name = new_name
+#     await session.commit()
+#     return {"new_category_set": True, "category": category}

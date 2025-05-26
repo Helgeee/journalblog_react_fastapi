@@ -6,6 +6,8 @@ import { IPost } from '../types/types'
 const PostPage = () => {
 	const { id } = useParams()
 	const [post, setPost] = useState<IPost | null>(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
 		const fetchPost = async () => {
@@ -14,35 +16,53 @@ const PostPage = () => {
 				setPost(data)
 			} catch (error) {
 				console.error('Ошибка при загрузке поста', error)
+				setError('Не удалось загрузить пост')
+			} finally {
+				setLoading(false)
 			}
 		}
 		fetchPost()
 	}, [id])
 
-	if (!post) return <div className="text-white">Загрузка...</div>
+	if (loading)
+		return <div className="text-white text-center mt-6">Загрузка...</div>
+	if (error) return <div className="text-red-500 text-center mt-6">{error}</div>
+	if (!post) return null
+	if (!id) {
+		setError('Некорректный ID поста')
+		setLoading(false)
+		return
+	}
 
 	return (
-		<div className="max-w-2xl mx-auto p-6 text-white rounded-lg shadow bg-component">
+		<div className="max-w-3xl mx-auto p-6 mt-4 text-white bg-component rounded-xl shadow">
 			<h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-			<p className="mb-4 text-white/70">{post.content}</p>
-			<div className="flex gap-2 flex-wrap mb-6">
-				{post.category?.name && (
-					<span className="bg-component-input rounded px-2 py-1 text-sm">
-						{post.category.name}
-					</span>
-				)}
-			</div>
-			<div className="grid grid-cols-3 gap-4 text-center text-sm">
+
+			{post.category?.name && (
+				<p className="mb-2 text-sm text-white/60">
+					Категория:{' '}
+					<span className="font-medium text-white">{post.category.name}</span>
+				</p>
+			)}
+
+			<hr className="my-4 border-white/10" />
+
+			<p className="text-lg leading-relaxed mb-6 whitespace-pre-line">
+				{post.content}
+			</p>
+
+			{/* Можно позже подключить реальные данные */}
+			<div className="grid grid-cols-3 gap-4 text-center text-sm border-t border-white/10 pt-4">
 				<div>
-					{/* <p className="font-medium">{post.views}</p> */}
+					<p className="font-medium">0</p>
 					<p className="text-white/60">Просмотры</p>
 				</div>
 				<div>
-					{/* <p className="font-medium">{post.likes}</p> */}
+					<p className="font-medium">0</p>
 					<p className="text-white/60">Лайки</p>
 				</div>
 				<div>
-					{/* <p className="font-medium">{post.comments?.length || 0}</p> */}
+					<p className="font-medium">0</p>
 					<p className="text-white/60">Комментарии</p>
 				</div>
 			</div>

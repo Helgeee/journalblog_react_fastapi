@@ -12,7 +12,9 @@ const Home: FC = () => {
 		const fetchPosts = async () => {
 			try {
 				const data = await PostService.getAll()
-				setPosts(data)
+				const sortedPosts = data.sort((a, b) => b.id - a.id)
+
+				setPosts(sortedPosts)
 			} catch (err) {
 				console.error('Ошибка при получении постов:', err)
 				setError('Не удалось загрузить посты')
@@ -26,7 +28,6 @@ const Home: FC = () => {
 
 	if (loading)
 		return <p className="text-center text-white">Загрузка постов...</p>
-
 	if (error) return <p className="text-center text-red-500">{error}</p>
 
 	return (
@@ -35,13 +36,12 @@ const Home: FC = () => {
 				<PostCard
 					key={post.id}
 					post={{
+						id: post.id,
 						title: post.title,
 						category: post.category?.name || 'Без категории',
-						items: [],
-						stats: { views: 0, likes: 0, comments: 0 },
+						is_published: post.is_published,
 						showMoreText: 'Читать дальше',
 					}}
-					onShowMore={() => console.log('Показать больше', post.id)}
 					className="mb-4"
 				/>
 			))}

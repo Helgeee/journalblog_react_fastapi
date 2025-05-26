@@ -1,11 +1,10 @@
+import enum
 from datetime import datetime
-
 from sqlalchemy import (
     func,
     ForeignKey,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-import enum
 
 from src.db.association_tables import (
     UserArticleAssociation,
@@ -19,23 +18,24 @@ class CheckAuthor(str, enum.Enum):
     not_author = "not author"
 
 
+class IsPublished(enum.Enum):
+    published = "published"
+    nonpublished = "nonpublished"
+
+
 class User(Base):
     # __table_args__ = {"extend_existing": True}  # можно удалить при алембике вроде
 
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str]
+    password: Mapped[bytes]
     is_author: Mapped[CheckAuthor] = mapped_column(default=CheckAuthor.not_author)
+    active: Mapped[bool] = mapped_column(default=True)
 
     article: Mapped[list["Article"]] = relationship(
         secondary="user_article_association",
         back_populates="user",
     )
-
-
-class IsPublished(enum.Enum):
-    published = "published"
-    nonpublished = "nonpublished"
 
 
 class Tag(Base):

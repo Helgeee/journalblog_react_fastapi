@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 
-from config import BASE_DIR
+from config import settings
 
 
 class Base(DeclarativeBase):
@@ -14,18 +14,16 @@ class Base(DeclarativeBase):
     id: Mapped[int] = mapped_column(primary_key=True)
 
 
-DATABASE_URL = f"sqlite+aiosqlite:///{BASE_DIR}/test.db"  # для sqlite
-
-
-# async_engine = create_async_engine(url=settings.DATABASE_URL_asyncpg, echo=True) # POSTGRESQL
-# async_session_factory = async_sessionmaker(async_engine, expire_on_commit=False) # POSTGRESQL
-async_engine = create_async_engine(url=DATABASE_URL, echo=True)  # sqlite
+async_engine = create_async_engine(
+    url=settings.DATABASE_URL_asyncpg,  # echo=True
+)  # POSTGRESQL
 async_session_factory = async_sessionmaker(
     async_engine, expire_on_commit=False
-)  # sqlite
+)  # POSTGRESQL
+
+# DATABASE_URL = f"sqlite+aiosqlite:///{BASE_DIR}/test.db"  # для sqlite
 
 
-# потом удалить
 async def create_tables():
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -39,3 +37,8 @@ async def drop_tables():
 async def get_async_session():
     async with async_session_factory() as session:
         yield session
+
+
+async def db_moves():
+    await drop_tables()
+    await create_tables()

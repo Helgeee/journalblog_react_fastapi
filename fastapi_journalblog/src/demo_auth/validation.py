@@ -2,28 +2,27 @@ from fastapi import Depends, HTTPException, Form
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from starlette import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api_v1.schemas.user_schema import UserSchemaTest
+from src.api_v1.schemas.user_schema import UserCreateSchema, UserSchema
 from src.auth import utils as auth_utils
-from src.demo_auth.crud import users_db
+from src.demo_auth.crud import get_user_by_username
 from src.demo_auth.helpers import (
     TOKEN_TYPE_FIELD,
     ACCESS_TOKEN_TYPE,
     REFRESH_TOKEN_TYPE,
 )
+from src.db.database import get_async_session
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/jwt/login")
 
 
-def get_current_token_payload(  # функция для получения payload токена
-    # credentials: HTTPAuthorizationCredentials = Depends(
-    #     http_bearer
-    # ),  # Мы берем payload токена из заголовков запроса вот от сюда "credentials"
+def get_current_token_payload(
     token: str = Depends(
         oauth2_scheme
     ),  # здесь токен у нас сам автоматически по-новому обновляется
-) -> UserSchemaTest:
-    # token = credentials.credentials
+) -> UserCreateSchema:
     try:
         payload = auth_utils.decode_jwt(
             token=token,
@@ -49,25 +48,36 @@ def validate_token_type(
     )
 
 
-def get_user_by_token_sub(payload: dict) -> UserSchemaTest:
+async def get_user_by_token_sub(
+    payload: dict,
+    session: AsyncSession = Depends(get_async_session),
+) -> UserCreateSchema:
     username: str | None = payload.get(
         "sub"
     )  # Его username в токене и берем от туда sub(то есть о ком вообще речь.
     # Там обычно ранится либо id, либо username у меня)
-    if user := users_db.get(username):  # Если есть, вытаскиваем юзера из базы данных
-        return user
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="token invalid(user not found)",
-    )
+    if not username:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token missing 'sub' field",
+        )
+
+    user = await get_user_by_username(payload["username"], session)
+    if not user:  # Если есть, вытаскиваем юзера из базы данных
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="token invalid(user not found)",
+        )
+    return user
 
 
 def get_auth_user_from_token_of_type(token_type: str):
-    def get_auth_user_from_token(
+    async def get_auth_user_from_token(
         payload: dict = Depends(get_current_token_payload),
-    ) -> UserSchemaTest:  # Получаем юзера находя
+        session: AsyncSession = Depends(get_async_session),
+    ) -> UserSchema:  # Получаем юзера находя
         validate_token_type(payload, token_type)
-        return get_user_by_token_sub(payload)
+        return await get_user_by_token_sub(payload, session)
 
     return get_auth_user_from_token
 
@@ -79,9 +89,10 @@ class UserGetterFromToken:
     def __call__(
         self,
         payload: dict = Depends(get_current_token_payload),
+        # session: AsyncSession = Depends(get_async_session),
     ):
         validate_token_type(payload, self.token_type)
-        return get_user_by_token_sub(payload)
+        return get_user_by_token_sub(payload)  # session
 
 
 get_current_auth_user = get_auth_user_from_token_of_type(ACCESS_TOKEN_TYPE)
@@ -89,8 +100,8 @@ get_current_auth_user = get_auth_user_from_token_of_type(ACCESS_TOKEN_TYPE)
 get_current_auth_user_for_refresh = UserGetterFromToken(REFRESH_TOKEN_TYPE)
 
 
-def get_current_active_auth_user(
-    user: UserSchemaTest = Depends(get_current_auth_user),
+async def get_current_active_auth_user(
+    user: UserSchema = Depends(get_current_auth_user),
 ):
     if user.active:
         return user
@@ -100,15 +111,18 @@ def get_current_active_auth_user(
     )
 
 
-def validate_auth_user(
+async def validate_auth_user(
     username: str = Form(),
     password: str = Form(),
+    session: AsyncSession = Depends(get_async_session),
 ):
     unauth_exc = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="invali username or password",
     )
-    if not (user := users_db.get(username)):
+
+    user = await get_user_by_username(username, session)
+    if not user:
         raise unauth_exc
 
     if not auth_utils.validate_password(
@@ -123,4 +137,4 @@ def validate_auth_user(
             detail="user inactive",
         )
 
-    return user
+    return user  # return UserCreateTest.model_validate(user)

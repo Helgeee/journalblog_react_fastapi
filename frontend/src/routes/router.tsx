@@ -5,6 +5,7 @@ import Home from '../pages/Home'
 import RoadsPage from '../pages/RoadsPage'
 import PostPage from '../pages/PostPage'
 import BridgesPage from '../pages/BridgesPage'
+import SettingPage from '../pages/SettingPage'
 
 export const router = createBrowserRouter([
 	{
@@ -25,8 +26,12 @@ export const router = createBrowserRouter([
 				element: <BridgesPage />,
 			},
 			{
-				path: 'post/:id', // 👈 добавь этот маршрут
+				path: 'post/:id',
 				element: <PostPage />,
+			},
+			{
+				path: 'setting',
+				element: <SettingPage />,
 			},
 
 			// {

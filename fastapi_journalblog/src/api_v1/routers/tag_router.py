@@ -43,6 +43,17 @@ async def get_tag(tag_id: int, session: AsyncSession = Depends(get_async_session
     return tag
 
 
+@router.delete("/{tag_id}", summary="Удаление тэга")
+async def delete_tag(tag_id: int, session: AsyncSession = Depends(get_async_session)):
+    tag = await session.get(Tag, tag_id)
+
+    if tag == None:
+        raise HTTPException(status_code=404, detail="Тег не найден")
+    await session.delete(tag)
+    await session.commit()
+    return {"succes_delete": True}
+
+
 # @router.patch("/{tag_id}", summary="Изменение имени тега удалить если не нужно")
 # async def update_tag_name(
 #     tag_id: int, new_name: str, session: AsyncSession = Depends(get_async_session)
@@ -54,14 +65,3 @@ async def get_tag(tag_id: int, session: AsyncSession = Depends(get_async_session
 #     tag.tag = new_name
 #     await session.commit()
 #     return {"new_tag_set": True, "tag": tag}
-
-
-@router.delete("/{tag_id}", summary="Удаление тэга")
-async def delete_tag(tag_id: int, session: AsyncSession = Depends(get_async_session)):
-    tag = await session.get(Tag, tag_id)
-
-    if tag == None:
-        raise HTTPException(status_code=404, detail="Тег не найден")
-    await session.delete(tag)
-    await session.commit()
-    return {"succes_delete": True}

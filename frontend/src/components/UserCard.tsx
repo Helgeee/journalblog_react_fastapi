@@ -2,9 +2,11 @@ import { FC } from 'react'
 import { FaMedal } from 'react-icons/fa'
 import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { openCreatePostModal } from '../store/modal/modalSlice'
+import { useNavigate } from 'react-router-dom' // <--- ВАЖНО
 
 const UserCard: FC = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	const { user, isAuth } = useAppSelector((state) => state.user)
 
 	if (!isAuth || !user) return null
@@ -16,10 +18,13 @@ const UserCard: FC = () => {
 			<hr className="my-3 border-gray-600" />
 			<div className="flex justify-center items-center gap-2 text-orange-400 text-xl">
 				<FaMedal />
-				{/* <span>{user.id}</span> */}
 			</div>
-			<hr className="my-3 border-gray-600" />
 
+			<div className="btn cursor-pointer" onClick={() => navigate('/setting')}>
+				<span>Настройки</span>
+			</div>
+
+			<hr className="my-3 border-gray-600" />
 			<div className="flex justify-center items-center p-5">
 				<button
 					className="btn btn-orange"

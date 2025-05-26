@@ -24,20 +24,20 @@ export interface IResponseUserData {
 	user: IResponseUser
 }
 
-export type ICreatePostPayload = {
+export interface ICreatePostPayload {
 	title: string
 	content: string
-	categoryName: string
+	categoryId: number
 }
 
-export type IPost = {
+export interface IPost {
 	id: number
 	title: string
 	content: string
-	category: {
-		id: number
-		name: string
-	}
+	category: ICategory
+	user: any[]
+	tag: any[]
+	is_published: 'published' | 'nonpublished'
 }
 
 export type ICategory = {

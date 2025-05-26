@@ -1,23 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { closeCreatePostModal } from '../store/modal/modalSlice'
 import { PostService } from '../services/post.service'
+import axios from 'axios'
+
+interface Category {
+	id: number
+	name: string
+}
 
 interface CreatePostModalProps {
 	onClose: () => void
 	onPublish: (postData: {
 		title: string
-		category: string
+		categoryId: number
 		content: string
 		file?: File
 	}) => void
 	onSaveDraft: (postData: {
 		title: string
-		category: string
+		categoryId: number
 		content: string
 		file?: File
 	}) => void
-	categories: string[]
+	categories: Category[]
 }
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({
@@ -28,7 +34,9 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 }) => {
 	const [title, setTitle] = useState('')
 	const [content, setContent] = useState('')
-	const [selectedCategory, setSelectedCategory] = useState('')
+	const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+		null,
+	)
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [fileName, setFileName] = useState('')
 
@@ -41,20 +49,20 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 	}
 
 	const handlePublish = () => {
-		if (!title || !selectedCategory) return
+		if (!title || !selectedCategoryId) return
 		onPublish({
 			title,
-			category: selectedCategory,
+			categoryId: selectedCategoryId,
 			content,
 			file: selectedFile || undefined,
 		})
 	}
 
 	const handleSaveDraft = () => {
-		if (!title || !selectedCategory) return
+		if (!title || !selectedCategoryId) return
 		onSaveDraft({
 			title,
-			category: selectedCategory,
+			categoryId: selectedCategoryId,
 			content,
 			file: selectedFile || undefined,
 		})
@@ -63,65 +71,68 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
 			<div className="bg-component rounded-2xl shadow-lg p-6 w-full max-w-md text-white">
-				<h2 className="text-2xl font-bold mb-4">Создание поста</h2>
+				<h2 className="text-2xl font-bold mb-4">Создание статьи</h2>
 
 				<div className="mb-4">
 					<label className="block text-xl font-medium text-white/60 mb-1">
 						Выберите категорию
 					</label>
 					<select
-						value={selectedCategory}
-						onChange={(e) => setSelectedCategory(e.target.value)}
-						className="w-full p-2 bg-component-input border-none rounded-md text-white placeholder-white/40 focus:outline-none  block text-sm bg-component-imput border border-gray-300 "
+						value={selectedCategoryId ?? ''}
+						onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
+						className="w-full p-2 bg-component-input border-none rounded-md
+							text-white placeholder-white/40 focus:outline-none block text-sm
+							bg-component-imput border border-gray-300 "
 					>
 						<option value="">-- Выберите категорию --</option>
 						{categories.map((category) => (
-							<option key={category} value={category}>
-								{category}
+							<option key={category.id} value={category.id}>
+								{category.name}
 							</option>
 						))}
 					</select>
 				</div>
 
 				<div className="mb-4">
-					<label className="block  text-xl font-medium text-white/60 mb-1">
+					<label className="block text-xl font-medium text-white/60 mb-1">
 						Название статьи
 					</label>
 					<input
 						type="text"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						className="w-full p-2 bg-component-input border-none rounded-md text-white placeholder-white/40 focus:outline-none  block text-sm bg-component-imput border border-gray-300 "
+						className="w-full p-2 bg-component-input border-none rounded-md
+							text-white placeholder-white/40 focus:outline-none block text-sm
+							bg-component-imput border border-gray-300 "
 						placeholder="Введите название"
 					/>
 				</div>
 
-				{/* Контент */}
 				<div className="mb-4">
-					<label className="block  text-xl font-medium text-white/60 mb-1">
-						Содержимое поста
+					<label className="block text-xl font-medium text-white/60 mb-1">
+						Содержимое статьи
 					</label>
 					<textarea
 						value={content}
 						onChange={(e) => setContent(e.target.value)}
-						className="w-full p-2 bg-component-input border-none rounded-md text-white placeholder-white/40 focus:outline-none  block text-sm bg-component-imput border border-gray-300  "
-						placeholder="Введите текст поста"
+						className="w-full p-2 bg-component-input border-none rounded-md
+							text-white placeholder-white/40 focus:outline-none block text-sm
+							bg-component-imput border border-gray-300 "
+						placeholder="Введите текст "
 						rows={4}
 					/>
 				</div>
 
-				{/* Файл */}
 				<div className="mb-6">
-					<label className="block text-xl  font-medium text-white/60 mb-1">
+					<label className="block text-xl font-medium text-white/60 mb-1">
 						Добавить файл
 					</label>
 					<label className="flex flex-col items-center px-4 py-2 bg-component-input text-blue-400 rounded-lg border border-blue-400 cursor-pointer hover:bg-component transition-colors">
-						<span className="text-xl ">{fileName || 'Выберите файл'}</span>
+						<span className="text-xl">{fileName || 'Выберите файл'}</span>
 						<input type="file" onChange={handleFileChange} className="hidden" />
 					</label>
 				</div>
 
-				{/* Кнопки */}
 				<div className="flex justify-between">
 					<button
 						onClick={handleSaveDraft}
@@ -139,7 +150,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 						<button
 							onClick={handlePublish}
 							className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300 rounded-md transition-colors"
-							disabled={!title || !selectedCategory}
+							disabled={!title || !selectedCategoryId}
 						>
 							Публикация
 						</button>
@@ -153,6 +164,31 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 const CreatePostModalWrapper = () => {
 	const dispatch = useAppDispatch()
 	const isOpen = useAppSelector((state) => state.modal.createPostModalOpen)
+	const [categories, setCategories] = useState<Category[]>([])
+
+	useEffect(() => {
+		if (!isOpen) return
+
+		const fetchCategories = async () => {
+			try {
+				const response = await axios.get<Category[]>(
+					'http://127.0.0.1:8000/api/v1/categories',
+					{
+						params: {
+							offset: 0,
+							limit: 100,
+						},
+					},
+				)
+
+				setCategories(response.data)
+			} catch (error) {
+				console.error('Ошибка при загрузке категорий:', error)
+			}
+		}
+
+		fetchCategories()
+	}, [isOpen])
 
 	if (!isOpen) return null
 
@@ -162,29 +198,26 @@ const CreatePostModalWrapper = () => {
 
 	const handlePublish = async (postData: {
 		title: string
-		category: string
+		categoryId: number
 		content: string
 		file?: File
 	}) => {
 		await PostService.createPost({
 			title: postData.title,
 			content: postData.content,
-			categoryName: postData.category,
+			categoryId: postData.categoryId,
+			file: postData.file,
 		})
 		handleClose()
 	}
 
 	const handleSaveDraft = async (postData: {
 		title: string
-		category: string
+		categoryId: number
 		content: string
 		file?: File
 	}) => {
-		await PostService.saveDraft({
-			title: postData.title,
-			content: postData.content,
-			categoryName: postData.category,
-		})
+		await PostService.saveDraft(postData)
 		handleClose()
 	}
 
@@ -193,7 +226,7 @@ const CreatePostModalWrapper = () => {
 			onClose={handleClose}
 			onPublish={handlePublish}
 			onSaveDraft={handleSaveDraft}
-			categories={['фыавафы', 'вапваып', 'Развлечения']}
+			categories={categories}
 		/>
 	)
 }

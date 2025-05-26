@@ -1,16 +1,12 @@
 from pydantic import BaseModel
 
 
-class TagBaseSchema(BaseModel):
+class TagCreateSchema(BaseModel):
     name: str
+
+
+class TagSchema(TagCreateSchema):
+    id: int
 
     class Config:
         from_attributes = True
-
-
-class TagCreateSchema(TagBaseSchema):
-    pass
-
-
-class TagSchema(TagBaseSchema):
-    id: int

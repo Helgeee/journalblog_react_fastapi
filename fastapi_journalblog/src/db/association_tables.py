@@ -26,16 +26,3 @@ class ArticleTagAssociation(Base):
 
     article_id: Mapped[int] = mapped_column(ForeignKey("articles.id"))
     tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
-
-
-#
-# class ArticleCategoryAssociation(Base):
-#     __tablename__ = "article_category_association"
-#     table_name = (
-#         UniqueConstraint(
-#             "article_id", "category_id", name="idx_unique_article_category"
-#         ),
-#     )
-#
-#     article_id: Mapped[int] = mapped_column(ForeignKey("articles.id"))
-#     category_id: Mapped[int] = mapped_column(ForeignKey("categorys.id"))

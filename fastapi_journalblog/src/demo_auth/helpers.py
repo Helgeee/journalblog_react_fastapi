@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from src.api_v1.schemas.user_schema import UserSchemaTest
+from src.api_v1.schemas.user_schema import UserSchema
 from src.auth import utils as auth_utils
 from config import settings
 
@@ -24,7 +24,7 @@ def create_jwt(
     )
 
 
-def create_access_token(user: UserSchemaTest) -> str:
+def create_access_token(user: UserSchema) -> str:
     jwt_payload = {
         "sub": user.username,
         "username": user.username,
@@ -37,7 +37,7 @@ def create_access_token(user: UserSchemaTest) -> str:
     )
 
 
-def create_refresh_token(user: UserSchemaTest) -> str:
+def create_refresh_token(user: UserSchema) -> str:
     jwt_payload = {
         "sub": user.username,
     }

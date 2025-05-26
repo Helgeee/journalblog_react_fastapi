@@ -77,7 +77,7 @@ const Header: FC = () => {
 								isActive ? 'text-white' : 'text-white/50'
 							}
 						>
-							Мосты
+							 Мосты
 						</NavLink>
 					</li>
 				</ul>

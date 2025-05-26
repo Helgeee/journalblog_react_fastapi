@@ -1,28 +1,27 @@
 from pydantic import BaseModel
 
-from src.api_v1.schemas.category_schema import CategoryBaseSchema
-from src.api_v1.schemas.tag_schema import TagBaseSchema
-from src.api_v1.schemas.user_schema import UserBaseSchema
+from src.api_v1.schemas.category_schema import CategorySchema
+from src.api_v1.schemas.tag_schema import TagSchema
+from src.api_v1.schemas.user_schema import UserSchema
 from src.db.models import IsPublished
 
 
-class ArticleBaseSchema(BaseModel):
+class ArticleCreateSchema(BaseModel):
     title: str
     content: str
-    # category_id: int
+    category_id: int
+    tag_ids: list[int] = []
 
-    category: CategoryBaseSchema = None
-    user: list[UserBaseSchema] = []
-    tag: list[TagBaseSchema] = []
+
+class ArticleSchema(BaseModel):
+    id: int
+    title: str
+    content: str
+
+    category: CategorySchema = None
+    user: list[UserSchema] = []
+    tag: list[TagSchema] = []
+    is_published: IsPublished
 
     class Config:
         from_attributes = True
-
-
-class ArticleCreateSchema(ArticleBaseSchema):
-    pass
-
-
-class ArticleSchema(ArticleBaseSchema):
-    id: int
-    is_published: IsPublished

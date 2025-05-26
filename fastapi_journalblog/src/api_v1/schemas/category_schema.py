@@ -1,16 +1,12 @@
 from pydantic import BaseModel
 
 
-class CategoryBaseSchema(BaseModel):
+class CategoryCreateSchema(BaseModel):
     name: str
+
+
+class CategorySchema(CategoryCreateSchema):
+    id: int
 
     class Config:
         from_attributes = True
-
-
-class CategoryCreateSchema(CategoryBaseSchema):
-    pass
-
-
-class CategorySchema(CategoryBaseSchema):
-    id: int

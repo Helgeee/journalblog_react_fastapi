@@ -1,38 +1,33 @@
-my_fastapi_project/
-│
-├── src/
-│   ├── main.py                    # Основной файл приложения (точка входа)
-│   ├── models/                    # Модели данных (например, SQLAlchemy модели)
-│   │   ├── __init__.py
-│   │   └── user.py                # Модель пользователя
-│   ├── schemas/                   # Pydantic схемы для валидации данных
-│   │   ├── __init__.py
-│   │   └── user.py                # Схема пользователя
-│   ├── routes/                    # Маршруты (endpoint'ы)
-│   │   ├── __init__.py
-│   │   └── user.py                # Маршруты для пользователей
-│   ├── services/                  # Логика бизнес-правил и взаимодействия с моделями
-│   │   ├── __init__.py
-│   │   └── user_service.py        # Сервис для управления пользователями
-│   ├── database/                  # Конфигурация базы данных
-│   │   ├── __init__.py
-│   │   └── database.py            # Настройки подключения к базе данных
-│   ├── middleware/                # Посредники (middleware)
-│   │   ├── __init__.py
-│   │   └── auth.py                # Middleware для аутентификации
-│   ├── exceptions/                # Исключения
-│   │   ├── __init__.py
-│   │   └── http_exceptions.py     # Пользовательские HTTP исключения
-│   ├── config/                    # Конфигурационные файлы
-│   │   ├── __init__.py
-│   │   └── settings.py            # Настройки приложения
-│
-├── tests/                         # Тесты
-│   ├── __init__.py
-│   ├── test_user.py               # Тесты для пользователя
-│   └── conftest.py                # Общие настройки для тестов (например, фикстуры)
-│
-├── .env                            # Файл для переменных окружения
-├── requirements.txt               # Зависимости проекта
-├── README.md                      # Документация проекта
-└── .gitignore                     # Игнорируемые файлы для Git
+app/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── alembic.ini
+├── compose.yml
+├── pyproject.toml
+├── poetry.lock
+├── requirements.txt
+├── src/                      # Основной код приложения
+│   ├── main.py               # Точка входа (может быть переименована в app.py)
+│   ├── config.py             # Конфигурация приложения
+│   ├── api/                  # API endpoints
+│   │   ├── v1/               # Версия API
+│   │   │   ├── init.py
+│   │   │   ├── endpoints/    # Разделение эндпоинтов по модулям
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── demo_auth.py
+│   │   │   │   └── ...
+│   │   │   └── routers.py    # Или здесь можно объединить все роутеры
+│   ├── core/                 # Ядро приложения
+│   │   ├── security.py       # Аутентификация, JWT и т.д.
+│   │   └── config.py         # Может заменить config.py на верхнем уровне
+│   ├── db/                   # Работа с базой данных
+│   │   ├── models.py         # ORM модели
+│   │   ├── repositories.py   # Паттерн репозиторий (опционально)
+│   │   └── session.py        # Сессии БД
+│   ├── migrations/           # Миграции Alembic
+│   └── schemas/              # Pydantic схемы
+├── nginx/                    # Конфигурация nginx
+└── tests/                    # Тесты (можно добавить позже)
