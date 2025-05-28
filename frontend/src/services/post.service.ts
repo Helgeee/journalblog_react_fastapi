@@ -10,7 +10,6 @@ export const PostService = {
 		const { title, content, categoryId, file } = payload
 
 		if (file) {
-			// Отправляем файл как FormData, остальные данные — в query params
 			const formData = new FormData()
 			formData.append('file', file)
 
@@ -66,10 +65,6 @@ export const PostService = {
 		const { data } = await instance.get<IPost[]>('/articles')
 		return data
 	},
-	// getAll: async (): Promise<IPost[]> => {
-	// 	const response = await axios.get(API_URL)
-	// 	return response.data
-	// },
 	getPostById: async (id: string | number): Promise<IPost> => {
 		const response = await instance.get(`${API_URL}/${id}`)
 		return response.data

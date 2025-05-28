@@ -5,9 +5,11 @@ import { AuthService } from './services/auth.service'
 import { login, logout } from './store/user/userSlice'
 import { useEffect } from 'react'
 import { useAppDispatch } from './store/hooks'
+import { useAuth } from './hooks/useAuth'
 
 function App() {
 	const dispatch = useAppDispatch()
+	useAuth()
 
 	const checkAuth = async () => {
 		const token = getTokenFromLocalStorage()
