@@ -12,7 +12,9 @@ const RoadsPage: FC = () => {
 		const fetchPosts = async () => {
 			try {
 				const data = await PostService.getAll()
-				const sortedPosts = data.sort((a, b) => b.id - a.id)
+				const sortedPosts = data
+					.filter((post) => post.category?.name === 'Дороги') 
+					.sort((a, b) => b.id - a.id)
 
 				setPosts(sortedPosts)
 			} catch (err) {

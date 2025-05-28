@@ -6,6 +6,8 @@ import RoadsPage from '../pages/RoadsPage'
 import PostPage from '../pages/PostPage'
 import BridgesPage from '../pages/BridgesPage'
 import SettingPage from '../pages/SettingPage'
+import FactoryPage from '../pages/FactoryPage'
+import CivilPage from '../pages/CivilPage'
 
 export const router = createBrowserRouter([
 	{
@@ -24,6 +26,14 @@ export const router = createBrowserRouter([
 			{
 				path: 'bridges',
 				element: <BridgesPage />,
+			},
+			{
+				path: 'factory',
+				element: <FactoryPage />,
+			},
+			{
+				path: 'civil',
+				element: <CivilPage />,
 			},
 			{
 				path: 'post/:id',

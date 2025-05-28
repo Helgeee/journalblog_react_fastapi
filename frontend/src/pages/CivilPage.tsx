@@ -3,7 +3,7 @@ import { PostService } from '../services/post.service'
 import PostCard from '../components/PostCard'
 import { IPost } from '../types/types'
 
-const BridgesPage: FC = () => {
+const CivilPage: FC = () => {
 	const [posts, setPosts] = useState<IPost[]>([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
@@ -13,7 +13,7 @@ const BridgesPage: FC = () => {
 			try {
 				const data = await PostService.getAll()
 				const sortedPosts = data
-					.filter((post) => post.category?.name === 'Мосты')
+					.filter((post) => post.category?.name === 'Гражданское строительство')
 					.sort((a, b) => b.id - a.id)
 
 				setPosts(sortedPosts)
@@ -51,4 +51,4 @@ const BridgesPage: FC = () => {
 	)
 }
 
-export default BridgesPage
+export default CivilPage
