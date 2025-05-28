@@ -1,9 +1,10 @@
 import { FC } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
+import { GiCableStayedBridge, GiHouse, GiFactory } from 'react-icons/gi'
 import { useAuth } from '../hooks/useAuth'
 import { useAppDispatch } from '../store/hooks'
-
+import { FaRoad } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 import { logout } from '../store/user/userSlice'
 import { openAuthModal } from '../store/modal/modalSlice'
@@ -35,6 +36,7 @@ const Header: FC = () => {
 								isActive ? 'text-white' : 'text-white/50'
 							}
 						>
+							<span className="flex justify-center items-center gap-2"></span>
 							Все статьи
 						</NavLink>
 					</li>
@@ -45,31 +47,13 @@ const Header: FC = () => {
 								isActive ? 'text-white' : 'text-white/50'
 							}
 						>
-							Дороги
+							<span className="flex justify-center items-center gap-2">
+								{' '}
+								<FaRoad /> Дороги
+							</span>
 						</NavLink>
 					</li>
 
-					<li>
-						<NavLink
-							to="/roads"
-							className={({ isActive }) =>
-								isActive ? 'text-white' : 'text-white/50'
-							}
-						>
-							Промышленное строительство
-						</NavLink>
-					</li>
-
-					<li>
-						<NavLink
-							to="/roads"
-							className={({ isActive }) =>
-								isActive ? 'text-white' : 'text-white/50'
-							}
-						>
-							Гражданское строительство
-						</NavLink>
-					</li>
 					<li>
 						<NavLink
 							to="/bridges"
@@ -77,7 +61,37 @@ const Header: FC = () => {
 								isActive ? 'text-white' : 'text-white/50'
 							}
 						>
-							 Мосты
+							<span className="flex justify-center items-center gap-2">
+								{' '}
+								<GiCableStayedBridge />
+								Мосты
+							</span>
+						</NavLink>
+					</li>
+
+					<li>
+						<NavLink
+							to="/factory"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							<span className="flex justify-center items-center gap-2">
+								<GiFactory /> Промышленное строительство
+							</span>
+						</NavLink>
+					</li>
+
+					<li>
+						<NavLink
+							to="/civil"
+							className={({ isActive }) =>
+								isActive ? 'text-white' : 'text-white/50'
+							}
+						>
+							<span className="flex justify-center items-center gap-2">
+								<GiHouse /> Гражданское строительство
+							</span>
 						</NavLink>
 					</li>
 				</ul>

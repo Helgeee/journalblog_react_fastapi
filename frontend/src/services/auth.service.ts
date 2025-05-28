@@ -1,12 +1,10 @@
 import { instance } from '../api/axios.api'
-import { IUser, IUserData, IResponseUserData } from '../types/types'
+import { IUser, IUserData } from '../types/types'
 import { setTokenToLocalStorage } from '../helpers/localstorage.helper'
 
 export const AuthService = {
-	async registration(
-		userData: IUserData,
-	): Promise<IResponseUserData | undefined> {
-		const response = await instance.post<IResponseUserData>('/users', null, {
+	async registration(userData: IUserData): Promise<IUser> {
+		const response = await instance.post<IUser>('/users', null, {
 			params: {
 				username: userData.username,
 				email: userData.email,
@@ -16,30 +14,41 @@ export const AuthService = {
 		return response.data
 	},
 
-	async login(userData: IUserData): Promise<IUser | undefined> {
+	async login(
+		userData: IUserData,
+	): Promise<{ user: IUser; access_token: string }> {
 		const formData = new URLSearchParams()
 		formData.append('username', userData.username)
 		formData.append('password', userData.password)
 
-		const { data } = await instance.post<IUser>('/jwt/login', formData, {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
+		const { data } = await instance.post<{ access_token: string }>(
+			'/jwt/login',
+			formData,
+			{
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			},
-		})
+		)
 
-		// Предположим, что сервер возвращает { access_token: string, ... }
-		if (data && (data as any).access_token) {
-			setTokenToLocalStorage((data as any).access_token)
-		}
+		const access_token = data.access_token
+		if (!access_token) throw new Error('No access token received')
+		setTokenToLocalStorage(access_token)
 
-		return data
+		const user = await this.getProfile()
+		if (!user) throw new Error('User profile not found after login')
+
+		return { user, access_token }
 	},
 
 	async getProfile(): Promise<IUser | undefined> {
-		const { data } = await instance.get<IUser>('jwt/users/me')
-		return data
+		try {
+			const { data } = await instance.get<IUser>('jwt/users/me')
+			return data
+		} catch (error) {
+			return undefined
+		}
 	},
+
 	deleteAccount: async () => {
-		return instance.delete('/users/me') // пример эндпоинта удаления текущего пользователя
+		return instance.delete('/users/me')
 	},
 }
