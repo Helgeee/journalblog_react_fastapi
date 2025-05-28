@@ -44,6 +44,7 @@ export const AuthService = {
 			const { data } = await instance.get<IUser>('jwt/users/me')
 			return data
 		} catch (error) {
+			console.error(error)
 			return undefined
 		}
 	},
