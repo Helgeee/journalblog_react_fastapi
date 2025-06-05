@@ -3,7 +3,7 @@ name = "fastapi-journalblog"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Pavlov Danil",email = "danpavkzn@mail.ru"}
+    {name = " ",email = " "}
 ]
 requires-python = ">=3.12"
 dependencies = [

@@ -23,9 +23,8 @@ export const PostService = {
 					'Content-Type': 'multipart/form-data',
 				},
 			})
-			return data
+			return data 
 		} else {
-			// Без файла — тело пустое, все через query params
 			const { data } = await instance.post<IPost>('/articles', null, {
 				params: {
 					title,
@@ -33,7 +32,7 @@ export const PostService = {
 					category_id: categoryId,
 				},
 				headers: {
-					'Content-Type': 'application/json', // можно не указывать, тело пустое
+					'Content-Type': 'application/json', 
 				},
 			})
 			return data
