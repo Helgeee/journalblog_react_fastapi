@@ -11,8 +11,7 @@
 - 🎨 **React Icons**
 - 🔄 **Redux Toolkit**
 - 📡 **Axios**
-- 💅 **Toastr**
-- 📝 **Markdown support**
+- ⚠️ **Toastr**
 
 ### Backend
 
@@ -20,7 +19,6 @@
 - 🏷️ **Pydantic**
 - 🛡️ **JWT**
 - 🐘 **PostgreSQL 17**
-- 🧩 **SQLAlchemy 2.0**
 - 🚦 **Async SQL**
 - 🌐 **CORS**
 
