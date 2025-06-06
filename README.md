@@ -1,4 +1,4 @@
-# Journal Blog
+# Платформа для размещения статей и публикаций (React + FastAPI) (2025)
 
 ## Technologies
 
